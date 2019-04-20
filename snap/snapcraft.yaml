@@ -1,0 +1,58 @@
+name: zotero-standalone
+version: '5.0.22'
+summary: Zotero Standalone
+description: |
+  Zotero Standalone
+
+confinement: devmode
+
+apps:
+  zotero:
+    command: desktop-launch $SNAP/usr/local/zotero/zotero
+    desktop: usr/local/zotero/zotero.desktop
+    plugs:
+      - desktop
+      - gsettings
+      - home
+      - network
+      - unity7
+      - wayland
+      - x11
+
+parts:
+  zotero-standalone:
+    plugin: dump
+    source: https://www.zotero.org/download/client/dl?channel=release&platform=linux-x86_64&version=5.0.22
+    source-type: tar
+    prepare: |
+      sed -i 's|^Exec=|Exec=zotero-standalone.zotero|' zotero.desktop
+      sed -i 's|^Icon=|Icon=${SNAP}/usr/local/zotero/chrome/icons/default/default256.png|' zotero.desktop
+    organize:
+      '*.chk': usr/local/zotero/
+      '*.dat': usr/local/zotero/
+      '*.gif': usr/local/zotero/
+      '*.ini': usr/local/zotero/
+      '*.ja': usr/local/zotero/
+      '*.jar': usr/local/zotero/
+      '*.list': usr/local/zotero/
+      '*.manifest': usr/local/zotero/
+      '*.so': usr/local/zotero/
+      'zotero*': usr/local/zotero/
+      chrome: usr/local/zotero/chrome
+      components: usr/local/zotero/components
+      defaults: usr/local/zotero/defaults
+      dictionaries: usr/local/zotero/dictionaries
+      extensions: usr/local/zotero/extensions
+      fonts: usr/local/zotero/fonts
+      gmp-clearkey: usr/local/zotero/gmp-clearkey
+      gtk2: usr/local/zotero/gtk2
+      icons: usr/local/zotero/icons
+      minidump-analyzer: usr/local/zotero/minidump-analyzer
+      pingsender: usr/local/zotero/pingsender
+      plugin-container: usr/local/zotero/plugin-container
+      set_launcher_icon: usr/local/zotero/set_launcher_icon
+      updater: usr/local/zotero/updater
+    stage-packages:
+      - libxt6
+    after:
+      - desktop-gtk2
